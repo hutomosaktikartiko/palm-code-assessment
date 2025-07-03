@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../di/injection_container.dart';
 import '../../features/book_details/presentation/pages/book_details_page.dart';
+import '../../features/home/presentation/bloc/books_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/likes/presentation/pages/likes_page.dart';
 
@@ -24,7 +27,7 @@ extension RouteConfigParsing on RouteConfig {
       case RouteConfig.home:
         return '/home';
       case RouteConfig.likes:
-        return '/likes';
+        return 'likes';
       case RouteConfig.bookDetails:
         return 'book-details';
     }
@@ -33,7 +36,10 @@ extension RouteConfigParsing on RouteConfig {
   Widget widget({Map? params}) {
     switch (this) {
       case RouteConfig.home:
-        return const HomePage();
+        return BlocProvider<BooksBloc>(
+          create: (context) => getIt<BooksBloc>(),
+          child: const HomePage(),
+        );
       case RouteConfig.likes:
         return const LikesPage();
       case RouteConfig.bookDetails:
